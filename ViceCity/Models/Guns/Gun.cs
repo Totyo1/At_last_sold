@@ -11,6 +11,7 @@ namespace ViceCity.Models.Guns
         private int bulletsPerBarrel;
         private int totalBullets;
         private bool canFire;
+        private const int initialBulletsPerBarrel = 10;
 
         protected Gun(string name, int bulletsPerBarrel, int totalBullets)
         {
@@ -79,6 +80,22 @@ namespace ViceCity.Models.Guns
                 this.canFire = value; 
             }
         }
-        public abstract int Fire();
+
+        public virtual int Fire()
+        {
+            if (!CanFire)
+            {
+                return 0;
+            }
+            if (BulletsPerBarrel == 0)
+            {
+                TotalBullets -= initialBulletsPerBarrel;
+                BulletsPerBarrel = initialBulletsPerBarrel;
+            }
+            this.BulletsPerBarrel--;
+
+            return 1;
+        }
+
     }
 }
