@@ -13,54 +13,34 @@ namespace ViceCity.Models.Players
         private string name;
         private int lifePoints;
         private IRepository<IGun> gunRepository;
-        private bool isAllive;
+
 
         protected Player(string name, int lifePoints)
         {
             this.Name = name;
             this.LifePoints = lifePoints;
-            this.IsAlive = isAllive;
             this.GunRepository = new GunRepository();
         }
 
         public string Name
         {
             get => this.name;
-            set
+            private set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentException("Player's name cannot be null or a whitespace!");
+                    throw new ArgumentNullException("Player's name cannot be null or a whitespace!");
                 }
                 this.name = value;
             }
         }
 
-        public bool IsAlive
-        {
-            get
-            {
-                if (this.lifePoints <= 0)
-                {
-                    this.isAllive = false;
-                }
-                else
-                {
-                    this.isAllive = true;
-                }
-                return this.isAllive;
-            }
-            set
-            {
-                this.isAllive = value;
-            }
-            
-        }
-
+        public bool IsAlive => this.LifePoints > 0;
+        
         public int LifePoints
         {
             get => this.lifePoints;
-            set
+            private set
             {
                 if (value < 0 )
                 {
@@ -70,22 +50,16 @@ namespace ViceCity.Models.Players
             }
         }
 
-        public IRepository<IGun> GunRepository
-        {
-            get => this.gunRepository;
-            set { this.gunRepository = value; }
-        }
-
+        public IRepository<IGun> GunRepository { get; }
+        
         public void TakeLifePoints(int points)
         {
-            if (this.LifePoints - points < 0)
+            this.lifePoints -= points;
+            if (this.lifePoints - points < 0)
             {
-                this.LifePoints = 0;
+                this.lifePoints = 0;
             }
-            else
-            {
-            this.LifePoints -= points;
-            }
+            
         }
     }
 }

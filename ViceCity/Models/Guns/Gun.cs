@@ -10,25 +10,22 @@ namespace ViceCity.Models.Guns
         private string name;
         private int bulletsPerBarrel;
         private int totalBullets;
-        private bool canFire;
 
         protected Gun(string name, int bulletsPerBarrel, int totalBullets)
         {
             this.Name = name;
             this.BulletsPerBarrel = bulletsPerBarrel;
             this.TotalBullets = totalBullets;
-            this.CanFire = canFire;
-
         }
 
         public string Name
         {
             get => this.name;
-            set
+            private set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentException("Name cannot be null or a white space!");
+                    throw new ArgumentNullException("Name cannot be null or a white space!");
                 }
                 this.name = value;
             }
@@ -37,7 +34,7 @@ namespace ViceCity.Models.Guns
         public int BulletsPerBarrel
         {
             get => this.bulletsPerBarrel;
-            set
+            private set
             {
                 if (value < 0)
                 {
@@ -50,7 +47,7 @@ namespace ViceCity.Models.Guns
         public int TotalBullets
         {
             get => this.totalBullets;
-            set
+            private set
             {
                 if (value < 0)
                 {
@@ -60,25 +57,27 @@ namespace ViceCity.Models.Guns
             }
         }
 
-        public bool CanFire
+        public bool CanFire => this.BulletsPerBarrel > 0 || this.TotalBullets > 0 ;
+        
+        public abstract int Fire();
+        protected void Reload(int capacity)
         {
-            get
+            if (TotalBullets >= capacity)
             {
-                if (this.BulletsPerBarrel == 0 && this.totalBullets == 0)
-                {
-                    this.canFire = false;
-                }
-                else
-                {
-                    this.canFire = true;
-                }
-                return this.canFire;
-            }
-            set
-            {
-                this.canFire = value; 
+            this.BulletsPerBarrel = capacity;
+            this.TotalBullets -= capacity; 
             }
         }
-        public abstract int Fire();
+
+        protected int DecreaseBullets(int bullets)
+        {
+            int firedBullets = 0;
+            if (this.BulletsPerBarrel - bullets >= 0)
+            {
+                this.BulletsPerBarrel -= bullets;
+                firedBullets = bullets;
+            }
+            return firedBullets;
+        }
     }
 }

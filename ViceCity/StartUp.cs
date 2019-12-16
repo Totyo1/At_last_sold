@@ -13,7 +13,7 @@ namespace ViceCity
     {
         static void Main(string[] args)
         {
-            Engine engine = new Engine();
+            IEngine engine = new Engine();
             engine.Run();
         }
     }

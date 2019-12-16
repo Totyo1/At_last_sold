@@ -6,27 +6,21 @@ namespace ViceCity.Models.Guns
 {
     class Rifle : Gun
     {
-        private const int initialBulletsPerBarrel = 50;
-        private const int initialTotalBullets = 500;
+        private const int InitialBulletsPerBarrel = 50;
+        private const int InitialTotalBullets = 500;
+        private const int BulletsPerShot = 5;
 
-        public Rifle(string name) : base(name, initialBulletsPerBarrel, initialTotalBullets)
+        public Rifle(string name) : base(name, InitialBulletsPerBarrel, InitialTotalBullets)
         {
         }
 
         public override int Fire()
         {
-            if (!CanFire)
+            if (this.BulletsPerBarrel < BulletsPerShot)
             {
-                return 0;
+                this.Reload(InitialBulletsPerBarrel);
             }
-            if (BulletsPerBarrel == 0)
-            {
-                TotalBullets -= initialBulletsPerBarrel;
-                BulletsPerBarrel = initialBulletsPerBarrel;
-            }
-            this.BulletsPerBarrel -= 5;
-
-            return 5;
+            return this.DecreaseBullets(BulletsPerShot);
         }
     }
 }
