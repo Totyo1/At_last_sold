@@ -22,12 +22,11 @@ namespace ViceCity.Models.Neghbourhoods
             if (civilPlayers.Count != 0)
             {
                 currPlayer = civilPlayers.First();
-                
             }
-            
+
             while (true)
             {
-                if (currGun == null || (mainPlayer.GunRepository.Models.Count == 0  && !currGun.CanFire))
+                if (currGun == null || (mainPlayer.GunRepository.Models.Count == 0 && !currGun.CanFire))
                 {
                     break;
                 }
@@ -42,13 +41,15 @@ namespace ViceCity.Models.Neghbourhoods
                 }
                 if (!currPlayer.IsAlive)
                 {
-                    civilPlayers.Remove(currPlayer);
                     currPlayer = civilPlayers.First();
-                    
                 }
                 while (currGun.CanFire && currPlayer.IsAlive)
                 {
                     currPlayer.TakeLifePoints(currGun.Fire());
+                }
+                if (!currPlayer.IsAlive)
+                {
+                    civilPlayers.Remove(currPlayer);
                 }
             }
             if (currPlayer.IsAlive)
@@ -59,7 +60,6 @@ namespace ViceCity.Models.Neghbourhoods
                     {
                         civilPlayers.Remove(currPlayer);
                         currPlayer = civilPlayers.First();
-                        
                     }
                     currGun = currPlayer.GunRepository.Models.First();
                     currPlayer.GunRepository.Remove(currGun);

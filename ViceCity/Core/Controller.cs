@@ -33,8 +33,7 @@ namespace ViceCity.Core
             players.Add(name, player);
             return $"Successfully added civil player: {name}!";
         }
-
-
+        
         public string AddGun(string type, string name)
         {
             IGun gun = null;
@@ -45,13 +44,14 @@ namespace ViceCity.Core
                     guns.Enqueue(gun);
 
                     return $"Successfully added {name} of type: {type}";
+
                 case "Rifle":
                     gun = new Rifle(name);
                     guns.Enqueue(gun);
 
                     return $"Successfully added {name} of type: {type}";
-                default:
 
+                default:
                     return "Invalid gun type!";
             }
         }
@@ -72,6 +72,7 @@ namespace ViceCity.Core
             if (name == MainName)
             {
                 mainPlayer.GunRepository.Add(gun);
+
                 return $"Successfully added {gun.Name} to the Main Player: Tommy Vercetti";
             }
             players[name].GunRepository.Add(gun);
@@ -84,17 +85,19 @@ namespace ViceCity.Core
             List<IPlayer> civils = players.Select(p => p.Value).ToList();
             int n = civils.Count;
             neighbourhood.Action(mainPlayer, civils);
-            var hps = civils.FindAll(x => x.LifePoints == 50).ToList();
+            var hps = civils.FindAll(x => x.IsAlive == true).ToList();
 
             if (mainPlayer.LifePoints == 100 && hps.Count == n)
             {
                 sb.Append("Everything is okay!");
+
                 return sb.ToString();
             }
             sb.AppendLine("A fight happened:")
                 .AppendLine($"Tommy live points: {mainPlayer.LifePoints}!")
                 .AppendLine($"Tommy has killed: {n - hps.Count} players!")
                 .AppendLine($"Left Civil Players: {hps.Count}!");
+
             return sb.ToString();
         }
     }

@@ -78,7 +78,14 @@ namespace ViceCity.Models.Players
 
         public void TakeLifePoints(int points)
         {
+            if (this.LifePoints - points < 0)
+            {
+                this.LifePoints = 0;
+            }
+            else
+            {
             this.LifePoints -= points;
+            }
         }
     }
 }
