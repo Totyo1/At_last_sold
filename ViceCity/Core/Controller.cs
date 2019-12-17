@@ -81,10 +81,8 @@ namespace ViceCity.Core
 
                 return $"Successfully added {gun.Name} to the Civil Player: {players[name].Name}";
             }
-            
-
-            return message;
         }
+
         public string Fight()
         {
             var sb = new StringBuilder();

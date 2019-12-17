@@ -19,7 +19,7 @@ namespace ViceCity.Models.Players
         {
             this.Name = name;
             this.LifePoints = lifePoints;
-            this.GunRepository = new GunRepository();
+            this.gunRepository = new GunRepository();
         }
 
         public string Name
@@ -50,7 +50,7 @@ namespace ViceCity.Models.Players
             }
         }
 
-        public IRepository<IGun> GunRepository { get; }
+        public IRepository<IGun> GunRepository => this.gunRepository;
         
         public void TakeLifePoints(int points)
         {
