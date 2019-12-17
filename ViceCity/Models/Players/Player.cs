@@ -40,7 +40,7 @@ namespace ViceCity.Models.Players
         public int LifePoints
         {
             get => this.lifePoints;
-            protected set
+            private set
             {
                 if (value < 0 )
                 {
