@@ -11,7 +11,7 @@ namespace ViceCity.Core
     {
         private IReader reader;
         private IWriter writer;
-        private Controller controller;
+        private readonly IController controller;
 
         public Engine()
         {
@@ -26,25 +26,25 @@ namespace ViceCity.Core
                 var input = reader.ReadLine().Split();
                 if (input[0] == "Exit")
                 {
-                    break;
+                    Environment.Exit(0);
                 }
                 try
                 {
                     if (input[0] == "AddPlayer")
                     {
-                        Console.WriteLine(controller.AddPlayer(input[1]));
+                        this.writer.WriteLine(this.controller.AddPlayer(input[1]));
                     }
                     else if (input[0] == "AddGun")
                     {
-                        Console.WriteLine(controller.AddGun(input[1], input[2]));
+                        this.writer.WriteLine(this.controller.AddGun(input[1], input[2]));
                     }
                     else if (input[0] == "AddGunToPlayer")
                     {
-                        Console.WriteLine(controller.AddGunToPlayer(input[1])); 
+                        this.writer.WriteLine(this.controller.AddGunToPlayer(input[1])); 
                     }
                     else if (input[0] == "Fight")
                     {
-                        Console.WriteLine(controller.Fight());
+                        this.writer.WriteLine(this.controller.Fight());
                     }            
                 }
                 catch (Exception ex)

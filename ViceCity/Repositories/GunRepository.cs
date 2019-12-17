@@ -33,12 +33,7 @@ namespace ViceCity.Repositories.Contracts
         
         public bool Remove(IGun model)
         {
-            if (!guns.ContainsKey(model.Name))
-            {
-                return false;
-            }
-            this.guns.Remove(model.Name);
-            return true;
+            return this.guns.Remove(model.Name);
         }
     }
 }

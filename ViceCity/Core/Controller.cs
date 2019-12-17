@@ -13,16 +13,16 @@ namespace ViceCity.Core
 {
     class Controller : IController
     {
-        private Queue<IGun> guns;
-        private Dictionary<string, IPlayer> players;
-        private MainPlayer mainPlayer;
-        private GangNeighbourhood neighbourhood; 
+        private readonly IList<IGun> guns;
+        private readonly Dictionary<string, IPlayer> players;
+        private readonly IPlayer mainPlayer;
+        private readonly GangNeighbourhood neighbourhood; 
         private const string MainName = "Vercetti";
 
         public Controller()
         {
             mainPlayer = new MainPlayer();
-            this.guns = new Queue<IGun>();
+            this.guns = new List<IGun>();
             this.players = new Dictionary<string, IPlayer>();
             this.neighbourhood = new GangNeighbourhood();
         }
@@ -41,61 +41,69 @@ namespace ViceCity.Core
             {
                 case "Pistol":
                     gun = new Pistol(name);
-                    guns.Enqueue(gun);
-
-                    return $"Successfully added {name} of type: {type}";
-
+                    break;
                 case "Rifle":
                     gun = new Rifle(name);
-                    guns.Enqueue(gun);
-
-                    return $"Successfully added {name} of type: {type}";
-
+                    break;
                 default:
                     return "Invalid gun type!";
             }
+            guns.Add(gun);
+            return $"Successfully added {name} of type: {type}";
         }
 
         public string AddGunToPlayer(string name)
         {
+            var message = string.Empty;
             if (guns.Count == 0)
             {
                 return "There are no guns in the queue!";
             }
 
-            if (!players.ContainsKey(name) && name != MainName)
-            {
-                return "Civil player with that name doesn't exists!";
-            }
+            var gun = this.guns.FirstOrDefault();
 
-            var gun = guns.Dequeue();
             if (name == MainName)
             {
                 mainPlayer.GunRepository.Add(gun);
+                guns.Remove(gun);
 
-                return $"Successfully added {gun.Name} to the Main Player: Tommy Vercetti";
+                return  $"Successfully added {gun.Name} to the Main Player: Tommy Vercetti";
             }
-            players[name].GunRepository.Add(gun);
 
-            return $"Successfully added {gun.Name} to the Civil Player: {players[name].Name}";
+            if (!players.ContainsKey(name) )
+            {
+                return "Civil player with that name doesn't exists!";
+            }
+            else
+            {
+                players[name].GunRepository.Add(gun);
+                guns.Remove(gun);
+
+                return $"Successfully added {gun.Name} to the Civil Player: {players[name].Name}";
+            }
+            
+
+            return message;
         }
         public string Fight()
         {
             var sb = new StringBuilder();
             List<IPlayer> civils = players.Select(p => p.Value).ToList();
-            int n = civils.Count;
+            int totalSumLifePoints = this.players.Values.Sum(p => p.LifePoints);
             neighbourhood.Action(mainPlayer, civils);
             var hps = civils.FindAll(x => x.IsAlive == true).ToList();
+            int totalSumLifePointsAfter = this.players.Values.Sum(p => p.LifePoints);
 
-            if (mainPlayer.LifePoints == 100 && hps.Count == n)
+            if (mainPlayer.LifePoints == 100 && totalSumLifePoints == totalSumLifePointsAfter)
             {
                 sb.Append("Everything is okay!");
 
                 return sb.ToString();
             }
+
             sb.AppendLine("A fight happened:")
                 .AppendLine($"Tommy live points: {mainPlayer.LifePoints}!")
-                .AppendLine($"Tommy has killed: {n - hps.Count} players!")
+                .AppendLine($"Tommy has killed: {civils.Count - hps.Count} players!")
                 .AppendLine($"Left Civil Players: {hps.Count}!");
 
             return sb.ToString();
