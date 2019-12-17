@@ -25,7 +25,7 @@ namespace ViceCity.Models.Guns
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException("Name cannot be null or a white space!");
+                    throw new ArgumentException("Name cannot be null or a white space!");
                 }
                 this.name = value;
             }
