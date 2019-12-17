@@ -28,7 +28,11 @@ namespace ViceCity.Repositories.Contracts
         
         public IGun Find(string name)
         {
-            return this.guns[name];
+            if (guns.ContainsKey(name))
+            {
+                return this.guns[name];
+            }
+            return null;
         }
         
         public bool Remove(IGun model)

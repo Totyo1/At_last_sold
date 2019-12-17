@@ -54,7 +54,6 @@ namespace ViceCity.Core
 
         public string AddGunToPlayer(string name)
         {
-            var message = string.Empty;
             if (guns.Count == 0)
             {
                 return "There are no guns in the queue!";
@@ -87,12 +86,12 @@ namespace ViceCity.Core
         {
             var sb = new StringBuilder();
             List<IPlayer> civils = players.Select(p => p.Value).ToList();
-            int totalSumLifePoints = this.players.Values.Sum(p => p.LifePoints);
+            int totalSumLifePointsBefore = this.players.Values.Sum(p => p.LifePoints);
             neighbourhood.Action(mainPlayer, civils);
             var hps = civils.FindAll(x => x.IsAlive == true).ToList();
             int totalSumLifePointsAfter = this.players.Values.Sum(p => p.LifePoints);
 
-            if (mainPlayer.LifePoints == 100 && totalSumLifePoints == totalSumLifePointsAfter)
+            if (mainPlayer.LifePoints == 100 && totalSumLifePointsBefore == totalSumLifePointsAfter)
             {
                 sb.Append("Everything is okay!");
 

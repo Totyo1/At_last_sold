@@ -4,11 +4,12 @@ using System.Text;
 
 namespace ViceCity.Models.Players
 {
-    class MainPlayer : Player
+    public class MainPlayer : Player
     {
-        private const int initialLifePoint = 100;
-        private const string initialName = "Tommy Vercetti";
-        public MainPlayer() : base(initialName, initialLifePoint)
+        private const int InitialLifePoint = 100;
+        private const string InitialName = "Tommy Vercetti";
+
+        public MainPlayer() : base(InitialName, InitialLifePoint)
         {
 
         }

@@ -29,7 +29,7 @@ namespace ViceCity.Models.Players
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentException("Player's name cannot be null or a whitespace!");
+                    throw new ArgumentNullException("Player's name cannot be null or a whitespace!");
                 }
                 this.name = value;
             }
@@ -40,7 +40,7 @@ namespace ViceCity.Models.Players
         public int LifePoints
         {
             get => this.lifePoints;
-            private set
+            protected set
             {
                 if (value < 0 )
                 {
